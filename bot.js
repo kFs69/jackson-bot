@@ -27,10 +27,15 @@ client.on('message', msg => {
   if(isValidCommand(msg, 'play')) {
     let link = msg.content.substring(6);
     let voiceChannel = msg.member.voice.channel;
+
+    if(!voiceChannel) {
+      return msg.channel.send('Entre em algum canal de voz');
+    } 
+
     let hasChannel = msg.guild.channels.cache.find(channel => channel.id === voiceChannel.id);
 
     if(!hasChannel) {
-      msg.channel.send('Canal não encontrado');
+      return msg.channel.send('Canal não encontrado');
     } else {
       voiceChannel.join()
       .then(conn => {
