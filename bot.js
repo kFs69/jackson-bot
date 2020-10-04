@@ -143,35 +143,30 @@ client.on('guildMemberAdd', member => {
 //   channel.send(embed);
 // })
 
-client.on('message', msg => {
-  if(msg.author.bot) return;
-  if(isValidCommand(msg, 'ping')) {
+const commands = {
+  ping(msg){
     msg.reply('pong');
-  }
-})
-
-client.on('message', msg => {
-  if(isValidCommand(msg, 'rolldice')) {
+  },
+  rolldice(msg){
     msg.reply(`${rollDice()}`);
-  }
-})
-
-client.on('message', async msg => {
-  if(isValidCommand(msg, 'bitcoin')) {
+  },
+  bitcoin(msg){
     moeda(msg, 'BTC');
-  }
-})
-
-client.on('message', async msg => {
-  if(isValidCommand(msg, 'dolar')) {
+  },
+  dolar(msg){
     moeda(msg, 'USD');
-  }
-})
-
-client.on('message', async msg => {
-  if(isValidCommand(msg, 'euro')) {
+  },
+  euro(msg){
     moeda(msg, 'EUR');
   }
+}
+
+client.on('message', msg => {
+  if(msg.author.bot) return;
+  if(!msg.content.toLowerCase().startsWith(PREFIX)) return;
+  const args = msg.content.split(" ");
+  if(!commands[args[0]]) return;
+  commands[args[0]](msg);
 })
 
 client.on('message', msg => {
